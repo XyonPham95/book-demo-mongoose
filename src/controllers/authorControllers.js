@@ -29,8 +29,18 @@ exports.updateAuthor = async (req, res) => {
 };
 
 exports.readAuthor = async (req, res) => {
-  const authors = await Author.find();
-  return res.json(200).json({ status: "ok", data: authors });
+  try {
+    const authors = await Author.find();
+    res.status(200).json({
+      status: "ok",
+      data: authors,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };
 
 exports.deleteAuthor = async (req, res) => {

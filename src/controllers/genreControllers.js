@@ -9,7 +9,17 @@ exports.createGenre = async (req, res) => {
   }
 };
 
-exports.readGenre = async (req, res) => {
-  const genres = await Author.find();
-  return res.json(200).json({ status: "ok", data: genres });
+exports.readGenres = async (req, res) => {
+  try {
+    const genre = await Genre.find();
+    res.status(200).json({
+      status: "ok",
+      data: genre,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };

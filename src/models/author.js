@@ -6,6 +6,11 @@ const authorSchema = mongoose.Schema({
     type: String,
     required: [true, "Author name is required"],
     trim: true,
+    validate: {
+      validator: function (v) {
+        return typeof v === "string";
+      },
+    },
   },
 });
 

@@ -12,9 +12,20 @@ const {
 } = require("./src/controllers/authorControllers");
 const {
   createGenre,
-  readGenre,
+  readGenres,
 } = require("./src/controllers/genreControllers");
-const { createBook } = require("./src/controllers/bookControllers");
+const {
+  createBook,
+  readBook,
+  deleteBook,
+} = require("./src/controllers/bookControllers");
+const { createUser } = require("./src/controllers/userControllers");
+const {
+  login,
+  auth,
+  logout,
+  logoutAll,
+} = require("./src/controllers/authControllers");
 
 mongoose
   .connect(process.env.DB_LOCAL, {
@@ -26,7 +37,7 @@ mongoose
   .then(() => console.log("connected to database"))
   .catch((err) => console.log(err));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(router);
 
@@ -35,13 +46,20 @@ router.get("/", (req, res) => {
 });
 
 router.route("/authors").get(readAuthor).post(createAuthor);
-
 router.delete("/authors/:id", deleteAuthor);
 router.put("/authors/:id", updateAuthor);
 
-router.route("/genres").post(createGenre).get(readGenre);
+router.route("/genres").post(createGenre).get(readGenres);
 
-router.route("/books").post(createBook);
+router.route("/books").get(readBook).post(createBook);
+router.delete("/books/:id", deleteBook);
+
+router.route("/users").post(createUser);
+
+router.route("/auth/login").post(login);
+
+router.get("/auth/logout", auth, logout);
+router.get("/auth/allout", auth, logoutAll);
 
 app.listen(process.env.PORT, () => {
   console.log("App is running on port", process.env.PORT);
