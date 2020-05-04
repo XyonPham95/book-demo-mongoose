@@ -2,14 +2,27 @@ const mongoose = require("mongoose");
 const Genre = require("./genre");
 const Author = require("./author");
 
-const schema = mongoose.Schema({
-  title: {
-    type: String,
-    required: [true, "title is required"],
-    trim: true,
+const schema = mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "title is required"],
+      trim: true,
+    },
+    genres: Array,
+    authors: Object,
   },
-  genres: Array,
-  authors: Object,
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+schema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "book",
 });
 
 schema.pre("save", async function (next) {

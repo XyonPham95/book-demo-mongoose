@@ -26,6 +26,11 @@ const {
   logout,
   logoutAll,
 } = require("./src/controllers/authControllers");
+const {
+  createReview,
+  readReviews,
+} = require("./src/controllers/reviewControllers");
+const validateBook = require("./src/middlewares/checkBook");
 
 mongoose
   .connect(process.env.DB_LOCAL, {
@@ -50,6 +55,11 @@ router.delete("/authors/:id", deleteAuthor);
 router.put("/authors/:id", updateAuthor);
 
 router.route("/genres").post(createGenre).get(readGenres);
+
+router
+  .route("/books/:bId/reviews")
+  .post(auth, validateBook, readReviews)
+  .get(auth, validateBook, createReview);
 
 router.route("/books").get(readBook).post(createBook);
 router.delete("/books/:id", deleteBook);
